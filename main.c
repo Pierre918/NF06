@@ -78,7 +78,10 @@ void EnregistrerInfosPatient(){
         //vérifier par la suite que le patient n'existe pas déjà
         //on fait un fichier pour la communication avec python avec les données écrites en txt
         //et un fichier où l'on utilise fwrite pour écrire les objets et donc les récupérer plus facilement en C
-        fwrite(&p, sizeof(patient), 1, ptr1);
+        size_t w=fwrite(&p, sizeof(patient), 1, ptr1);
+        if (written < 1) {
+            printf("Failed to write to file\n");
+        }
         fprintf(ptr, "%s|",p.nom);
         fprintf(ptr, "%s|",p.prenom);
         fprintf(ptr, "%d|",p.matricule);
@@ -90,9 +93,10 @@ void EnregistrerInfosPatient(){
         fprintf(ptr, "%s|",p.medecin_spec);
         fprintf(ptr, "%s|",p.medecin_coord);
         fprintf(ptr, "%s|",p.dateHeure);
-        fprintf(ptr, "%d|\n\n\n",p.nbNuit);
+        fprintf(ptr, "%d|\n",p.nbNuit);
     }
     fclose(ptr);
+    fclose(ptr1);
 }
 void afficherPatient(patient p){
             printf("\n%s\n",p.nom);
@@ -118,7 +122,7 @@ void afficherPatient(patient p){
             printf("Nombre de nuit : ");
             scanf(" %d",&p.nbNuit);
 }
-void RechercherFichierPatient(){
+patient RechercherFichierPatient(){
     int n;
     int compteur = 0 ; 
     FILE *ptr;
@@ -132,8 +136,8 @@ void RechercherFichierPatient(){
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
             if (p.matricule==n){//complete lena
-                print("Le dossier du patient a ete trouvé"); 
-                afficherPatient(p);
+                printf("Le dossier du patient a ete trouvé"); 
+                return p;
                 break;   
             }
                  
