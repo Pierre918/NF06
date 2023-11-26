@@ -31,55 +31,52 @@ void EnregistrerInfosPatient(){
     FILE *ptr;
     ptr = fopen("patients_python.txt", "a");
     FILE *ptr1;
-    ptr1 = fopen("patients_C.txt", "a");
+    ptr1 = fopen("patients_C.bin", "ab");
+    if (ptr1 == NULL) {
+        printf("Failed to open file for writing\n");
+    }
     while (continuer=='n'){
-        printf("quitter(o), continuer(n): ");scanf(" %c",&continuer);
-        if (continuer=='o'){
-            break;
+
+
+        printf("service (consultation : c | urgence : u) : ");
+        scanf(" %c",&choix);
+        if (choix=='c'){
+            strcpy(p.service, "consultation");
         }
         else{
-            printf("service (consultation : c | urgence : u) : ");
-            scanf(" %c",&choix);
-            if (choix=='c'){
-                strcpy(p.service, "consultation");
-            }
-            else{
-                strcpy(p.service, "urgence");
+            strcpy(p.service, "urgence");
 
-            }
-            printf("nom : ");
-            scanf(" %[^\n]",p.nom);
-            printf("prenom : ");
-            scanf(" %[^\n]",p.prenom);
-            printf("numero d'immatriculation : ");
-            scanf(" %d",&p.matricule);
-            printf("adresse : ");
-            scanf(" %[^\n]",p.adresse);
-            printf("age : ");
-            scanf(" %d",&p.age);
-            printf("sexe (f/h) : ");
-            scanf(" %c",&p.sexe);
-            printf("description de la maladie : ");
-            scanf(" %[^\n]",p.maladie);
-            printf("Numero de chambre : ");
-            scanf(" %d",&p.nChambre);
-            printf("Specialisation du medecin : ");
-            scanf(" %[^\n]",p.medecin_spec);
-            printf("Coordonnees du medecin : ");
-            scanf(" %[^\n]",p.medecin_coord);
-            printf("Date d'entree et heure (jj/mm/aaaa hh:mm): ");
-            scanf(" %[^\n]",p.dateHeure);
-            printf("Nombre de nuit : ");
-            scanf(" %d",&p.nbNuit);
-            
         }
-    
-
+        printf("nom : ");
+        scanf(" %[^\n]",p.nom);
+        printf("prenom : ");
+        scanf(" %[^\n]",p.prenom);
+        printf("numero d'immatriculation : ");
+        scanf(" %d",&p.matricule);
+        printf("adresse : ");
+        scanf(" %[^\n]",p.adresse);
+        printf("age : ");
+        scanf(" %d",&p.age);
+        printf("sexe (f/h) : ");
+        scanf(" %c",&p.sexe);
+        printf("description de la maladie : ");
+        scanf(" %[^\n]",p.maladie);
+        printf("Numero de chambre : ");
+        scanf(" %d",&p.nChambre);
+        printf("Specialisation du medecin : ");
+        scanf(" %[^\n]",p.medecin_spec);
+        printf("Coordonnees du medecin : ");
+        scanf(" %[^\n]",p.medecin_coord);
+        printf("Date d'entree et heure (jj/mm/aaaa hh:mm): ");
+        scanf(" %[^\n]",p.dateHeure);
+        printf("Nombre de nuit : ");
+        scanf(" %d",&p.nbNuit);
+        
         //vérifier par la suite que le patient n'existe pas déjà
         //on fait un fichier pour la communication avec python avec les données écrites en txt
         //et un fichier où l'on utilise fwrite pour écrire les objets et donc les récupérer plus facilement en C
         size_t w=fwrite(&p, sizeof(patient), 1, ptr1);
-        if (written < 1) {
+        if (w < 1) {
             printf("Failed to write to file\n");
         }
         fprintf(ptr, "%s|",p.nom);
@@ -94,6 +91,12 @@ void EnregistrerInfosPatient(){
         fprintf(ptr, "%s|",p.medecin_coord);
         fprintf(ptr, "%s|",p.dateHeure);
         fprintf(ptr, "%d|\n",p.nbNuit);
+
+        //on réenregistre qqn ?
+        printf("quitter(o), continuer(n): ");scanf(" %c",&continuer);
+        if (continuer=='o'){
+            break;
+        }
     }
     fclose(ptr);
     fclose(ptr1);
@@ -144,7 +147,7 @@ patient RechercherFichierPatient(){
         }
     }
     else{
-
+        
     }
 }
 
