@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-coucou
+salut ;
 typedef struct patient patient;
 struct patient{
     char service[10];
@@ -19,7 +19,10 @@ struct patient{
     char medecin_spec[30];
     char medecin_coord[50];
     char dateHeure[20];
+    //char soin[100]; 
     int nbNuit;
+
+    // Ajouter le soin : accouchement, ORL....
 };
 void EnregistrerInfosPatient(){
     char continuer='n';
@@ -117,6 +120,7 @@ void afficherPatient(patient p){
 }
 void RechercherFichierPatient(){
     int n;
+    int compteur = 0 ; 
     FILE *ptr;
     patient p;
     ptr = fopen("patients_C.txt", "r");
@@ -127,13 +131,60 @@ void RechercherFichierPatient(){
         scanf(" %[^\n]", &n);
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
-            if (p.immatriculation==n)
+            if (p.matricule==n){//complete lena
+                break;   
+            }
+            print("Le dossier du patient a ete trouvé"); 
+            afficherPatient(p); 
         }
     }
     else{
 
     }
 }
+
+
+void calculerDevis(){
+    int matricule ;
+    int nb_nuit ; 
+    int prix_chambre ; 
+    int prix_total ; 
+    
+    printf("Saisir le matricule du patient : ");
+    scanf("%d", &matricule); 
+    FILE *ptr;
+    patient p;
+    ptr = fopen("patients_C.txt", "r");
+    while(feof(ptr)!=0){
+        fread (&p ,sizeof (patient) ,1 , ptr);
+        if (p.matricule == matricule ){
+            break ;           //  je recupere le pointeur 
+        }           
+    }
+    nb_nuit = p.nbNuit ; 
+    nb_nuit = nb_nuit * 68 ; 
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int main(){
 int selec = 1;
 while (selec!=7){
