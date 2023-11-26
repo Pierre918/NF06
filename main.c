@@ -19,7 +19,8 @@ struct patient{
     char medecin_spec[30];
     char medecin_coord[50];
     char dateHeure[20];
-    //char soin[100]; 
+    int nb_soins ; 
+    char soin[7]; 
     int nbNuit;
 
     // Ajouter le soin : accouchement, ORL....
@@ -27,6 +28,8 @@ struct patient{
 void EnregistrerInfosPatient(){
     char continuer='n';
     char choix;
+    char soin_alternatif[100]; 
+    int i; 
     patient p;   
     FILE *ptr;
     ptr = fopen("patients_python.txt", "a");
@@ -69,6 +72,57 @@ void EnregistrerInfosPatient(){
         scanf(" %[^\n]",p.medecin_coord);
         printf("Date d'entree et heure (jj/mm/aaaa hh:mm): ");
         scanf(" %[^\n]",p.dateHeure);
+        printf("Saisir le nombre de soins : ");
+        scanf("%d", &p.nb_soins);
+        for(i=0, i<p.nb_soins i+=1){
+            printf("Saisir les soins : Accouchement, Bilan de sante, Opération du canal carpien, ORL, Echographie, Coloscopie, IRM");
+            scanf(" %[^\n]",p.soin_alternatif);
+            if (p.soin_alternatif == "Accouchement"){
+                strcpy(p.soin, "a");
+            }
+            if (p.soin == "Bilan de sante"){
+                strcpy(p.soin, "b");
+            }
+            if (p.soin == "Opération du canal carpien"){
+                strcpy(p.soin, "o");
+            }
+            if (p.soin == "ORL"){
+                strcpy(p.soin, "o");
+            }
+            if (p.soin == "Echographie"){
+                strcpy(p.soin, "e");
+            }
+            if (p.soin == "Coloscopie"){
+                strcpy(p.soin, "c");
+            }
+            if (p.soin == "IRM"){
+                strcpy(p.soin, "i");
+            }
+        }
+        printf("Saisir les soins : Accouchement, Bilan de sante, Opération du canal carpien, ORL, Echographie, Coloscopie, IRM");
+            scanf(" %[^\n]",p.soin);
+            f (p.soin == "Accouchement"){
+                strcpy(p.soin, "a");
+            }
+            if (p.soin == "Bilan de sante"){
+                strcpy(p.soin, "b");
+            }
+            if (p.soin == "Opération du canal carpien"){
+                strcpy(p.soin, "o");
+            }
+            if (p.soin == "ORL"){
+                strcpy(p.soin, "o");
+            }
+            if (p.soin == "Echographie"){
+                strcpy(p.soin, "e");
+            }
+            if (p.soin == "Coloscopie"){
+                strcpy(p.soin, "c");
+            }
+            if (p.soin == "IRM"){
+                strcpy(p.soin, "i");
+            }
+    
         printf("Nombre de nuit : ");
         scanf(" %d",&p.nbNuit);
         
@@ -153,24 +207,14 @@ patient RechercherFichierPatient(){
 
 
 void calculerDevis(){
-    int matricule ;
-    int nb_nuit ; 
+    patient p ; 
+    p = RechercherFichierPatient;
+    int nb_nuit;
     int prix_chambre ; 
     int prix_total ; 
-    
-    printf("Saisir le matricule du patient : ");
-    scanf("%d", &matricule); 
-    FILE *ptr;
-    patient p;
-    ptr = fopen("patients_C.txt", "r");
-    while(feof(ptr)!=0){
-        fread (&p ,sizeof (patient) ,1 , ptr);
-        if (p.matricule == matricule ){
-            break ;           //  je recupere le pointeur 
-        }           
-    }
+ 
     nb_nuit = p.nbNuit ; 
-    nb_nuit = nb_nuit * 68 ; 
+    prix_chambre = nb_nuit * 68 ; 
 
 
 
