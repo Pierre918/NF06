@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-coucou
+
 typedef struct patient patient;
 struct patient{
     char service[10];
@@ -49,17 +49,17 @@ void EnregistrerInfosPatient(){
             printf("prenom : ");
             scanf(" %[^\n]",p.prenom);
             printf("numero d'immatriculation : ");
-            scanf(" %[^\n]",&p.matricule);
+            scanf(" %d",&p.matricule);
             printf("adresse : ");
             scanf(" %[^\n]",p.adresse);
             printf("age : ");
-            scanf(" %[^\n]",&p.age);
+            scanf(" %d",&p.age);
             printf("sexe (f/h) : ");
-            scanf(" %[^\n]",&p.sexe);
+            scanf(" %c",&p.sexe);
             printf("description de la maladie : ");
             scanf(" %[^\n]",p.maladie);
             printf("Numero de chambre : ");
-            scanf(" %[^\n]",&p.nChambre);
+            scanf(" %d",&p.nChambre);
             printf("Specialisation du medecin : ");
             scanf(" %[^\n]",p.medecin_spec);
             printf("Coordonnees du medecin : ");
@@ -67,7 +67,7 @@ void EnregistrerInfosPatient(){
             printf("Date d'entree et heure (jj/mm/aaaa hh:mm): ");
             scanf(" %[^\n]",p.dateHeure);
             printf("Nombre de nuit : ");
-            scanf(" %[^\n]",&p.nbNuit);
+            scanf(" %d",&p.nbNuit);
             
         }
     
@@ -75,7 +75,7 @@ void EnregistrerInfosPatient(){
         //vérifier par la suite que le patient n'existe pas déjà
         //on fait un fichier pour la communication avec python avec les données écrites en txt
         //et un fichier où l'on utilise fwrite pour écrire les objets et donc les récupérer plus facilement en C
-        fwrite(&p, sizeof(patient), 1, ptr2);
+        fwrite(&p, sizeof(patient), 1, ptr1);
         fprintf(ptr, "%s|",p.nom);
         fprintf(ptr, "%s|",p.prenom);
         fprintf(ptr, "%d|",p.matricule);
@@ -95,17 +95,17 @@ void afficherPatient(patient p){
             printf("\n%s\n",p.nom);
             printf("%s\n",p.prenom);
             printf("%d\n",p.matricule);
-            scanf(" %[^\n]",&p.matricule);
+            scanf(" %d",&p.matricule);
             printf("adresse : ");
             scanf(" %[^\n]",p.adresse);
             printf("age : ");
-            scanf(" %[^\n]",&p.age);
+            scanf(" %d",&p.age);
             printf("sexe (f/h) : ");
             scanf(" %[^\n]",&p.sexe);
             printf("description de la maladie : ");
             scanf(" %[^\n]",p.maladie);
             printf("Numero de chambre : ");
-            scanf(" %[^\n]",&p.nChambre);
+            scanf(" %d",&p.nChambre);
             printf("Specialisation du medecin : ");
             scanf(" %[^\n]",p.medecin_spec);
             printf("Coordonnees du medecin : ");
@@ -113,7 +113,7 @@ void afficherPatient(patient p){
             printf("Date d'entree et heure (jj/mm/aaaa hh:mm): ");
             scanf(" %[^\n]",p.dateHeure);
             printf("Nombre de nuit : ");
-            scanf(" %[^\n]",&p.nbNuit);
+            scanf(" %d",&p.nbNuit);
 }
 void RechercherFichierPatient(){
     int n;
@@ -121,13 +121,15 @@ void RechercherFichierPatient(){
     patient p;
     ptr = fopen("patients_C.txt", "r");
     printf("Numéro de dossier (1) ou nom complet (2) :");
-    scanf(" %[^\n]", &n);
+    scanf(" %d", &n);
     if (n==1){
         printf("Numéro de dossier : ");
         scanf(" %[^\n]", &n);
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
-            if (p.immatriculation==n)
+            if (p.matricule==n){
+                afficherPatient(p);
+            }
         }
     }
     else{
@@ -146,6 +148,8 @@ while (selec!=7){
         if (selec==1){
             EnregistrerInfosPatient();
         }
+        else if (selec==2)
+            RechercherFichierPatient();
         // ....
         else if (selec==7){
             break;
