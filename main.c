@@ -19,68 +19,97 @@ struct patient{
     char medecin_spec[30];
     char medecin_coord[50];
     char dateHeure[20];
-    char soin[100]; 
+    int nb_soins ; 
+    char soin[7]; 
     int nbNuit;
+    int prix ; 
 
-    // Ajouter le soin : accouchement, ORL....
 };
 void EnregistrerInfosPatient(){
     char continuer='n';
     char choix;
+    char soin_alternatif[100]; 
+    int i; 
     patient p;   
     FILE *ptr;
     ptr = fopen("patients_python.txt", "a");
     FILE *ptr1;
-    ptr1 = fopen("patients_C.txt", "a");
+    ptr1 = fopen("patients_C.bin", "ab");
+    if (ptr1 == NULL) {
+        printf("Failed to open file for writing\n");
+    }
     while (continuer=='n'){
-        printf("quitter(o), continuer(n): ");scanf(" %c",&continuer);
-        if (continuer=='o'){
-            break;
+
+
+        printf("service (consultation : c | urgence : u) : ");
+        scanf(" %c",&choix);
+        if (choix=='c'){
+            strcpy(p.service, "consultation");
         }
         else{
-            printf("service (consultation : c | urgence : u) : ");
-            scanf(" %c",&choix);
-            if (choix=='c'){
-                strcpy(p.service, "consultation");
-            }
-            else{
-                strcpy(p.service, "urgence");
+            strcpy(p.service, "urgence");
 
-            }
-            printf("nom : ");
-            scanf(" %[^\n]",p.nom);
-            printf("prenom : ");
-            scanf(" %[^\n]",p.prenom);
-            printf("numero d'immatriculation : ");
-            scanf(" %d",&p.matricule);
-            printf("adresse : ");
-            scanf(" %[^\n]",p.adresse);
-            printf("age : ");
-            scanf(" %d",&p.age);
-            printf("sexe (f/h) : ");
-            scanf(" %c",&p.sexe);
-            printf("description de la maladie : ");
-            scanf(" %[^\n]",p.maladie);
-            printf("Numero de chambre : ");
-            scanf(" %d",&p.nChambre);
-            printf("Specialisation du medecin : ");
-            scanf(" %[^\n]",p.medecin_spec);
-            printf("Coordonnees du medecin : ");
-            scanf(" %[^\n]",p.medecin_coord);
-            printf("Date d'entree et heure (jj/mm/aaaa hh:mm): ");
-            scanf(" %[^\n]",p.dateHeure);
+        }
+        printf("nom : ");
+        scanf(" %[^\n]",p.nom);
+        printf("prenom : ");
+        scanf(" %[^\n]",p.prenom);
+        printf("numero d'immatriculation : ");
+        scanf(" %d",&p.matricule);
+        printf("adresse : ");
+        scanf(" %[^\n]",p.adresse);
+        printf("age : ");
+        scanf(" %d",&p.age);
+        printf("sexe (f/h) : ");
+        scanf(" %c",&p.sexe);
+        printf("description de la maladie : ");
+        scanf(" %[^\n]",p.maladie);
+        printf("Numero de chambre : ");
+        scanf(" %d",&p.nChambre);
+        printf("Specialisation du medecin : ");
+        scanf(" %[^\n]",p.medecin_spec);
+        printf("Coordonnees du medecin : ");
+        scanf(" %[^\n]",p.medecin_coord);
+        printf("Date d'entree et heure (jj/mm/aaaa hh:mm): ");
+        scanf(" %[^\n]",p.dateHeure);
+        printf("Saisir le nombre de soins : ");
+        scanf("%d", &p.nb_soins);
+        for(i=0; i<p.nb_soins; i+=1){
             printf("Saisir les soins : Accouchement, Bilan de sante, Opération du canal carpien, ORL, Echographie, Coloscopie, IRM");
-            scanf(" %[^\n]",p.soin);
-            printf("Nombre de nuit : ");
-            scanf(" %d",&p.nbNuit);
-            
+            scanf(" %100[^\n]",soin_alternatif);
+            if (strcmp(soin_alternatif, "Accouchement" ) == 0) {
+                p.soin[i] = 'a';
+            }
+            else if (strcmp(soin_alternatif, "Bilan de sante" ) == 0){
+                p.soin[i] = 'b';
+            }
+            else if (strcmp(soin_alternatif, "Opération du canal carpien" ) == 0){
+                p.soin[i] = 'z';
+            }
+            else if (strcmp(soin_alternatif, "ORL" ) == 0){
+                p.soin[i] = 'o';
+            }
+            else if (strcmp(soin_alternatif, "Echographie" ) == 0){
+                p.soin[i] = 'e';
+            }
+            else if (strcmp(soin_alternatif, "Coloscopie" ) == 0){
+                p.soin[i] = 'c';
+            }
+            else if (strcmp(soin_alternatif, "IRM" ) == 0){
+                p.soin[i] = 'i';
+            }
         }
     
-
+        printf("Nombre de nuit : ");
+        scanf(" %d",&p.nbNuit);
+        
         //vérifier par la suite que le patient n'existe pas déjà
         //on fait un fichier pour la communication avec python avec les données écrites en txt
         //et un fichier où l'on utilise fwrite pour écrire les objets et donc les récupérer plus facilement en C
-        fwrite(&p, sizeof(patient), 1, ptr1);
+        size_t w=fwrite(&p, sizeof(patient), 1, ptr1);
+        if (w < 1) {
+            printf("Failed to write to file\n");
+        }
         fprintf(ptr, "%s|",p.nom);
         fprintf(ptr, "%s|",p.prenom);
         fprintf(ptr, "%d|",p.matricule);
@@ -92,9 +121,20 @@ void EnregistrerInfosPatient(){
         fprintf(ptr, "%s|",p.medecin_spec);
         fprintf(ptr, "%s|",p.medecin_coord);
         fprintf(ptr, "%s|",p.dateHeure);
-        fprintf(ptr, "%d|\n\n\n",p.nbNuit);
+        // Inscire les soins subis 
+        for(i=0; i<p.nb_soins; i+=1){
+            fprintf(ptr, "%c-",p.soin[i]); 
+        }
+        fprintf(ptr, "%d|\n",p.nbNuit);
+
+        //on réenregistre qqn ?
+        printf("quitter(o), continuer(n): ");scanf(" %c",&continuer);
+        if (continuer=='o'){
+            break;
+        }
     }
     fclose(ptr);
+    fclose(ptr1);
 }
 void afficherPatient(patient p){
             printf("\n%s\n",p.nom);
@@ -121,70 +161,117 @@ void afficherPatient(patient p){
             scanf(" %d",&p.nbNuit);
 }
 patient RechercherFichierPatient(){
+    int compteur_nom = 0; 
+    int compteur_matricule = 0 ; 
+    char nom_recherche[20] ;  
     int n;
     int compteur = 0 ; 
-    char nom_recherche[20]; 
-    int compteur_num_dossier = 0;
-    int compteur_nom = 0; 
+    int matricule ; 
     FILE *ptr;
     patient p;
-    ptr = fopen("patients_C.txt", "r");
+    ptr = fopen("patients_C.txt", "r+b");
+
+
     printf("Numéro de dossier (1) ou nom complet (2) :");
     scanf(" %d", &n);
     if (n==1){
         printf("Numéro de dossier : ");
-        scanf(" %[^\n]", &n);
+        scanf(" %[^\n]", &matricule);
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
             if (p.matricule==n){
-                compteur_num_dossier+=1 ; 
+                compteur_matricule +=1 ; 
                 printf("Le dossier du patient a ete trouvé"); 
                 return p;
                 break;   
-            }
-                 
+            }      
         }
     }
+    
     else{
-        printf("Saisir le nom du patient : "); 
-        scanf("%s",&nom_recherche );
+        printf("Nom de famille du patient : "); 
+        scanf("%s", &nom_recherche); 
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
-            if (strcmp(p.nom, nom_recherche) == 0){
-                compteur_nom +=1 ; 
-                printf("Le dossier du passient a été trouvé");
-                return p;
-                break ;
-            }
-
+            if (strcmp(nom_recherche, p.nom) == 0){
+                compteur_nom+=1 ; 
+                printf("Le dossier du patient a ete trouve");
+                return p; 
+                break ; 
+            }   
+        }
     }
-}
-
-if ((compteur_nom == 0) && (compteur_num_dossier == 0)){
-    printf("Le dossier n'a pas été trouvé ");
-} 
-}
-
-
-void calculerDevis(){
-    int matricule ;
-    int nb_nuit ; 
-    int prix_chambre ; 
-    int prix_total ; 
+    if (compteur_matricule == 0 && compteur_nom == 0){
+        printf("Le dossier n'a pas été trouvé"); 
+    }
     
-    printf("Saisir le matricule du patient : ");
-    scanf("%d", &matricule); 
-    FILE *ptr;
-    patient p;
-    ptr = fopen("patients_python.txt", "r");
-    while(feof(ptr)!=0){
-        fread (&p ,sizeof (patient) ,1 , ptr);
-        if (p.matricule == matricule ){
-            break ;           //  je recupere le pointeur 
-        }           
+}
+
+patient modifierFichier(){
+    FILE *ptr ; 
+    ptr = fopen("patients_python.txt", "r+b");
+    int matricule ; 
+    char val_modif[10];
+    patient p ; 
+    int i;
+    p = RechercherFichierPatient();
+
+    printf("Saisir la donnée a modifier : Service (S), Nom (N), Prenom (P), Matricule (M), Age(A), Adresse (Ad), Sexe (S), Maladie (Ma), Numero de chambre (nbC), le prix paye (prix), le nombre de nuits passees (nbN), le nombre de soins et les soins(soins), le medecin (med), les coordonnees du medecin(medC), la date et l'heure (d)");
+    scanf("%s", &val_modif); 
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+patient calculerDevis(){
+    patient p ; 
+    int i;
+    p = RechercherFichierPatient();
+    int prix_chambre ; 
+    int prix_total = 0 ;
+    int nb_soins = p.nb_soins;
+    int nb_nuit = p.nbNuit ; 
+    nb_nuit = p.nbNuit ;
+
+    prix_total += nb_nuit * 68 ;
+    for (i=0;i<nb_soins; i+=1){
+        if(p.soin[i] == 'a'){
+            prix_total += 2600; 
+        }
+        else if(p.soin[i] == 'b'){
+            prix_total += 50; 
+        }
+        else if(p.soin[i] == 'z'){
+            prix_total += 1250; 
+        }
+        else if(p.soin[i] == 'o'){
+            prix_total += 35; 
+        }
+        else if(p.soin[i] == 'e'){
+            prix_total += 85; 
+        }
+        else if(p.soin[i] == 'c'){
+            prix_total += 190; 
+        }
+        else if(p.soin[i] == 'i'){
+            prix_total += 400; 
+        }
     }
-    nb_nuit = p.nbNuit ; 
-    nb_nuit = nb_nuit * 68 ; 
+
+    p.prix = prix_total ; 
+
+    return p ;  
 
 
 
@@ -221,10 +308,11 @@ while (selec!=7){
         }
         else if (selec==2)
             RechercherFichierPatient();
+
         // ....
         else if (selec==7){
             break;
-        } 
-    }
+}
+}
 }
 }
