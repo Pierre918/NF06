@@ -19,7 +19,7 @@ struct patient{
     char medecin_spec[30];
     char medecin_coord[50];
     char dateHeure[20];
-    //char soin[100]; 
+    char soin[100]; 
     int nbNuit;
 
     // Ajouter le soin : accouchement, ORL....
@@ -69,6 +69,8 @@ void EnregistrerInfosPatient(){
             scanf(" %[^\n]",p.medecin_coord);
             printf("Date d'entree et heure (jj/mm/aaaa hh:mm): ");
             scanf(" %[^\n]",p.dateHeure);
+            printf("Saisir les soins : Accouchement, Bilan de sante, Opération du canal carpien, ORL, Echographie, Coloscopie, IRM");
+            scanf(" %[^\n]",p.soin);
             printf("Nombre de nuit : ");
             scanf(" %d",&p.nbNuit);
             
@@ -118,9 +120,12 @@ void afficherPatient(patient p){
             printf("Nombre de nuit : ");
             scanf(" %d",&p.nbNuit);
 }
-void RechercherFichierPatient(){
+patient RechercherFichierPatient(){
     int n;
     int compteur = 0 ; 
+    char nom_recherche[20]; 
+    int compteur_num_dossier = 0;
+    int compteur_nom = 0; 
     FILE *ptr;
     patient p;
     ptr = fopen("patients_C.txt", "r");
@@ -131,17 +136,33 @@ void RechercherFichierPatient(){
         scanf(" %[^\n]", &n);
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
-            if (p.matricule==n){//complete lena
-                print("Le dossier du patient a ete trouvé"); 
-                afficherPatient(p);
+            if (p.matricule==n){
+                compteur_num_dossier+=1 ; 
+                printf("Le dossier du patient a ete trouvé"); 
+                return p;
                 break;   
             }
                  
         }
     }
     else{
+        printf("Saisir le nom du patient : "); 
+        scanf("%s",&nom_recherche );
+        while (!feof(ptr)){
+            fread (&p ,sizeof (patient) ,1 , ptr);
+            if (strcmp(p.nom, nom_recherche) == 0){
+                compteur_nom +=1 ; 
+                printf("Le dossier du passient a été trouvé");
+                return p;
+                break ;
+            }
 
     }
+}
+
+if ((compteur_nom == 0) && (compteur_num_dossier == 0)){
+    printf("Le dossier n'a pas été trouvé ");
+} 
 }
 
 
@@ -155,7 +176,7 @@ void calculerDevis(){
     scanf("%d", &matricule); 
     FILE *ptr;
     patient p;
-    ptr = fopen("patients_C.txt", "r");
+    ptr = fopen("patients_python.txt", "r");
     while(feof(ptr)!=0){
         fread (&p ,sizeof (patient) ,1 , ptr);
         if (p.matricule == matricule ){
