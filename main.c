@@ -19,8 +19,9 @@ struct patient{
     char medecin_spec[30];
     char medecin_coord[50];
     char dateHeure[20];
-    int nb_soins ; 
-    char soin[7]; 
+    //int nb_soins ; 
+    int soin[7]; //indice correspond à : Accouchement(0), Bilan de sante(1), Opération du canal carpien(2), ORL(3), Echographie(4), Coloscopie(5), IRM(6)");
+
     int nbNuit;
     int prix ; 
 
@@ -73,8 +74,17 @@ void EnregistrerInfosPatient(){
         scanf(" %[^\n]",p.medecin_coord);
         printf("Date d'entree et heure (jj/mm/aaaa hh:mm): ");
         scanf(" %[^\n]",p.dateHeure);
-        printf("Saisir le nombre de soins : ");
-        scanf("%d", &p.nb_soins);
+        char saisir='o';
+        int soin;
+        while (saisir=='o'){
+            printf("Saisissez un soins subis par le patient : \nAccouchement (1), Bilan de sante(2), Opération du canal carpien(3), ORL(4), Echographie(5), Coloscopie(6), IRM(7)");
+            scanf(" %d", soin);
+            printf("Combien de fois ce soin a été subis ?");
+            scanf("%d",p.soin[soin-1]);
+            printf("Avez vous un autre soin à enregistrer ? oui : o | non : n");
+            scanf(" %c",saisir);
+        }
+        /*
         for(i=0; i<p.nb_soins; i+=1){
             printf("Saisir les soins : Accouchement, Bilan de sante, Opération du canal carpien, ORL, Echographie, Coloscopie, IRM");
             scanf(" %[^\n]",soin_alternatif);
@@ -100,7 +110,7 @@ void EnregistrerInfosPatient(){
                 p.soin[i] = 'i';
             }
         }
-    
+    */
         printf("Nombre de nuit : ");
         scanf(" %d",&p.nbNuit);
         
@@ -122,6 +132,7 @@ void EnregistrerInfosPatient(){
         fprintf(ptr, "%s|",p.medecin_spec);
         fprintf(ptr, "%s|",p.medecin_coord);
         fprintf(ptr, "%s|",p.dateHeure);
+        fprintf(ptr, "%s|",p.nb_soins);
         // Inscire les soins subis 
         for(i=0; i<p.nb_soins; i+=1){
             fprintf(ptr, "%c-",p.soin[i]); 
@@ -169,7 +180,7 @@ patient RechercherFichierPatient(){
     int compteur = 0 ; 
     FILE *ptr;
     patient p;
-    ptr = fopen("patients_C.txt", "r");
+    ptr = fopen("patients_C.bin", "r+b");
     if (manip == 2){
         
     }
@@ -195,11 +206,11 @@ patient RechercherFichierPatient(){
 
 patient modifier_info_patient(){
     FILE *ptr ; 
-    ptr = fopen("patients_python.txt", "r")
+    ptr = fopen("patients_python.txt", "r");
     int matricule ; 
     patient p; 
 
-    printf("Saisir le donnée  modifier ")
+    printf("Saisir le donnée  modifier ");
     p = RechercherFichierPatient();
     
 

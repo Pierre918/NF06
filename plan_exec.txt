@@ -1,0 +1,77 @@
+Fonctionnalités (éléments de la consigne) :
+1.
+    EnregistrerNouveauPatient
+        Appelle ces deux fonctions : 
+        DemandeInfosPatient
+            demande les infos du patient à l'utilisateur
+            retourne un patient
+        EnregistrerInfosPatient
+            prend en parametre un patient et le fichier dans lequel on veut l'enregistrer
+            l'enregistre
+2.
+    RechercherModifier
+    demande à l'utilisateur le nom du patient/le mattricule
+        Appelle ces deux fonctions : 
+        RechercherFichierPatient
+            prend en paramètre le résultat de la demande au dessus
+            retourne le patient
+        AfficherPatient
+            prend en parametre un patient 
+            affiche les infos du patient
+        ModifierPatient
+            prend en parametre un patient 
+            modifie les infos du patient.
+            On affiche le patient. On demande ce que l'utilisateur veut modifier. On modifie. On redemande si l'utilisateur veut modifier quelque chose. 
+            On réitère jsk ce qu'il ne veuile plus rien modifier.
+            On supprime l'ancienne ligne associée au patient. On enregistre le patient avec les modifications.
+3.
+    ListePatient
+        ImportationPatient:
+            pas de paramètres, renvoit une liste de patients. Utiliser la fonction realloc pour parcour le fichier et ajouter des patients au fur et à mesure
+        ModifierListePatient:
+            prend en parametre une liste de patients
+            demander le critère de rangement (1,2,3,4,5,..)
+            supprimer (ou créer une liste annexe) les patients de la liste qui ne respectent pas le critère OU afficher lorsque le tri est simple (tous sauf alphabétique)
+            Piste : rassembler tous les noms et prénoms dans une liste et utiliser le script suivant (ou du genre :)
+            
+                    #include <stdio.h>
+                    #include <stdlib.h>
+                    #include <string.h>
+
+                    int compare(const void *a, const void *b) {
+                        return strcmp(*(const char **)a, *(const char **)b);
+                    }
+
+                    int main() {
+                        const char *strings[] = {"Zebra", "Apple", "Tomato", "Banana", "Cherry"};
+                        int size = sizeof(strings) / sizeof(strings[0]);
+
+                        qsort(strings, size, sizeof(const char *), compare);
+
+                        for(int i = 0; i < size; i++) {
+                            printf("%s ", strings[i]);
+                        }
+
+                        return 0;
+                    }
+4.
+    SupprimerPatient  
+        demande le numéro du patient à l'utilisateur
+        Appelle ces deux fonctions : 
+        RechercherFichierPatient
+            prend en paramètre le résultat de la demande au dessus
+            retourne le patient
+        Appelle EnregistrerInfosPatient avec en paramètre un fichier dédié au patients supprimés
+        SupprimerLignePatient
+            prend en parametre un patient 
+            supprime la ligne associée au patient
+5.
+    CalculerDevisPatient
+        demande le numéro du patient à l'utilisateur
+        Appelle ces deux fonctions : 
+        RechercherFichierPatient
+        CalculerDevis
+            prend en parametre un patient 
+            calcule le devis du patient
+            retourne le devis
+6.insh
