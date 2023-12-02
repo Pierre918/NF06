@@ -26,12 +26,28 @@ struct patient{
     // Ajouter le soin : accouchement, ORL....
 };
 int main(){
+    
     FILE *ptr;
     patient p;
     ptr = fopen("patients_C.bin", "r+b");
 
     fread (&p ,sizeof (patient) ,1 , ptr);
     
-    printf("%s",p.nom);
+    printf("%s\n",p.nom);
     printf("%d",p.nb_soins);
+        char id[100] = "123";
+    char other[100] = "123";
+
+    if (strcmp(id, other) == 0) {
+        printf("The strings are equal\n");
+    } else {
+        printf("The strings are not equal\n");
+    }
+
+    return 0;
+    /*
+    int soin[7];
+    scanf(" %d", &soin[0]);
+    printf("%d",soin[0]);
+    */
 }
