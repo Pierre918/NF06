@@ -8,7 +8,7 @@ const char *SOINS[7]={"Accouchement", "Bilan de sante", "Opération du canal car
 //utilisé pour décrire les soins
 typedef struct patient patient;
 struct patient{
-    char service[10];
+    char service[20];
     char nom[20];
     char prenom[20];
     int matricule;
@@ -98,6 +98,7 @@ void EnregistrerInfosPatient(patient p){
     if (w < 1) {
         printf("Failed to write to file\n");
     }
+    fprintf(ptr, "%c|",p.service);
     fprintf(ptr, "%s|",p.nom);
     fprintf(ptr, "%s|",p.prenom);
     fprintf(ptr, "%d|",p.matricule);
@@ -152,7 +153,7 @@ void AfficherPatient(patient p){
             printf("Soin effectués : \n");
             for (int i=0;i<7;i++){
                 if (p.soin[i]!=0){
-                    printf("\t- %s\n",SOINS[i]);
+                    printf("\t- %s : %d\n",SOINS[i],p.soin[i]);
                 }
             }
             printf("Nombre de nuit : %d\n",p.nbNuit);
@@ -161,14 +162,14 @@ void AfficherPatient(patient p){
 patient RechercherFichierPatient(char id[], char MorN){ //Matricule ou nom
     FILE *ptr;
     patient p;
-    ptr = fopen("patients_C.bin", "r");
+    ptr = fopen("patients_C.bin", "r+b");
     if (MorN=='m'){
         int num;
         num = atoi(id);
-        printf("%d",num);
+        printf("coucou");
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
-            
+            printf("%d\n",p.matricule);
             if (p.matricule==num){ 
                 printf("Le dossier du patient a ete trouvé"); 
                 return p; 
@@ -188,9 +189,81 @@ patient RechercherFichierPatient(char id[], char MorN){ //Matricule ou nom
     strcpy(p.nom, "erreur pas de dossier trouve");
     return p;
 }
+void ModifierPatient(patient p){
+    int elt=0;
+    while (elt<1 && elt>20){
+        printf("Element a modifier : service(1), nom(2), prenom(3), matricule(4), adresse(5), age(6), sexe(7), maladie(8), numero de chambre(9), specifications du medecin(10), coordonnees du medecin(11), date et heure(12), soins : \n\t- nombre d'accouchement (13)\n\t-nombre de bilan de sante(14)\n\t-nombre d'operation du canal carpien(15)\n\t-nombre d'ORL(16)\n\t-nombre d'echographie(17)\n\t-nombre de coloscopie(18)\n\t-nombre d'IRM(19)\nnombre de nuit(20)");
+        scanf(" %d",&elt);
+    }
+    switch(elt){
+        case 1:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.service);
+            scanf(" %c", p.service);
+        case 2:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.nom);
+            scanf(" %s", p.nom);
+        case 3:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.prenom);
+            scanf(" %s", p.nom);
+        case 4:
+            printf("Ancienne valeur : %d. Nouvelle : ",p.matricule);
+            scanf(" %d", p.matricule);
+        case 5:
+            printf("Ancienne valeur : %d. Nouvelle : ",p.age);
+            scanf(" %d", p.age);
+        case 6:
+            printf("Ancienne valeur : %c. Nouvelle (f/h) : ",p.sexe);
+            scanf(" %c", p.sexe);
+        case 7:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 8:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 9:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 10:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 11:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 12:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 13:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 14:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 15:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 16:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 17:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 18:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 19:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+        case 20:
+            printf("Ancienne valeur : %s. Nouvelle : ",p.adresse);
+            scanf(" %s", p.adresse);
+    }
+
+}
 void RechercherModifier(){
     char id[100];
     char MorN='c';
+    patient p;
+    strcpy(p.nom,"erreur pas de dossier trouve");
     while (MorN!='m' && MorN!='n'){
         printf("Recherche par Numéro de dossier (m) ou nom complet (n) ? ");
         scanf(" %c", &MorN);
@@ -202,10 +275,17 @@ void RechercherModifier(){
         printf("Entrer le nom du patient : ");
     }
     scanf(" %s",id); //scanf ajoute \0 à la fin de la saisie, donc uniquemnt les lettres tapées par l'utilisateur seront comparées 
-    patient p = RechercherFichierPatient(id,MorN);
-    if (strcmp(p.nom, "erreur pas de dossier trouve") != 0)
+    p = RechercherFichierPatient(id,MorN);
+    if (strcmp(p.nom, "erreur pas de dossier trouve") != 0){
         AfficherPatient(p);
-    
+        char choice='c';
+        while (choice!='o' && choice!='n'){
+            printf("souhaitez vous modifier ce dossier ? (o/n) ");
+            scanf(" %c",choice);
+        }
+        if (choice=='o')
+            ModifierPatient(p);
+    }
 /*
     int compteur_nom = 0; 
     int compteur_matricule = 0 ; 
@@ -329,7 +409,7 @@ patient calculerDevis(){
 int main(){
     int selec = 1;
     while (selec!=7){
-        printf("-------------------------------------------------------\nSelectionnez le numero correspondant a l'action que vous voulez réaliser : \n1. Enregistrer un nouveau dossier patient\n2. Rechercher ou modifier le dossier patient\n3. Liste des dossiers des patients\n4. Supprimer des dossiers patients\n5. Calculer le devis\n6. Afficher les statistiques\n7. Sortir de l'application\n");
+        printf("-------------------------------------------------------\nSelectionnez le numero correspondant a l'action que vous voulez réaliser : \n1. Enregistrer un nouveau dossier patient\n2. Rechercher ou modifier le dossier patient\n3. Liste des dossiers des patients\n4. Supprimer des dossiers patients\n5. Afficher les statistiques\n6. Sortir de l'application\n");
         scanf("%d",&selec);
         if (selec>7 || selec<1){
             printf("\nVeuillez saisir un nombre entre 1 et 7");
@@ -342,7 +422,7 @@ int main(){
                 RechercherModifier();
 
             // ....
-            else if (selec==7){
+            else if (selec==6){
                 break;
     }
     }

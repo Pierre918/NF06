@@ -34,7 +34,12 @@ int main(){
     fread (&p ,sizeof (patient) ,1 , ptr);
     
     printf("%s\n",p.nom);
-    printf("%d",p.nb_soins);
+    printf("%d\n",p.nb_soins);
+    fread (&p ,sizeof (patient) ,1 , ptr);
+    
+    printf("nom :%s\n",p.nom);
+    printf("nb_nuit : %d",p.nbNuit);
+    /*
         char id[100] = "123";
     char other[100] = "123";
 
@@ -45,7 +50,7 @@ int main(){
     }
 
     return 0;
-    /*
+    
     int soin[7];
     scanf(" %d", &soin[0]);
     printf("%d",soin[0]);
