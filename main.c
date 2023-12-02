@@ -125,7 +125,7 @@ void EnregistrerInfosPatient(){
         for(i=0; i<p.nb_soins; i+=1){
             fprintf(ptr, "%c-",p.soin[i]); 
         }
-        fprintf(ptr, "%d|\n",p.nbNuit);
+        fprintf(ptr, "|%d|\n",p.nbNuit);
 
         //on réenregistre qqn ?
         printf("quitter(o), continuer(n): ");scanf(" %c",&continuer);
@@ -169,7 +169,7 @@ patient RechercherFichierPatient(){
     int matricule ; 
     FILE *ptr;
     patient p;
-    ptr = fopen("patients_C.txt", "r+b");
+    ptr = fopen("patients_C.bin", "r+b");
 
 
     printf("Numéro de dossier (1) ou nom complet (2) :");
@@ -179,6 +179,7 @@ patient RechercherFichierPatient(){
         scanf(" %[^\n]", &matricule);
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
+            
             if (p.matricule==n){
                 compteur_matricule +=1 ; 
                 printf("Le dossier du patient a ete trouvé"); 
@@ -191,6 +192,7 @@ patient RechercherFichierPatient(){
     else{
         printf("Nom de famille du patient : "); 
         scanf("%s", &nom_recherche); 
+
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
             if (strcmp(nom_recherche, p.nom) == 0){
