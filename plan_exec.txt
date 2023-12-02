@@ -24,7 +24,7 @@ Fonctionnalités (éléments de la consigne) :
             On affiche le patient. On demande ce que l'utilisateur veut modifier. On modifie. On redemande si l'utilisateur veut modifier quelque chose. 
             On réitère jsk ce qu'il ne veuile plus rien modifier.
             On supprime l'ancienne ligne associée au patient. On enregistre le patient avec les modifications.
-3.
+3. Lena
     ListePatient
         ImportationPatient:
             pas de paramètres, renvoit une liste de patients. Utiliser la fonction realloc pour parcour le fichier et ajouter des patients au fur et à mesure
@@ -65,7 +65,7 @@ Fonctionnalités (éléments de la consigne) :
         SupprimerLignePatient
             prend en parametre un patient 
             supprime la ligne associée au patient
-5.
+5. Lena 
     CalculerDevisPatient
         demande le numéro du patient à l'utilisateur
         Appelle ces deux fonctions : 

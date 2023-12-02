@@ -132,10 +132,12 @@ void EnregistrerInfosPatient(){
         fprintf(ptr, "%s|",p.medecin_spec);
         fprintf(ptr, "%s|",p.medecin_coord);
         fprintf(ptr, "%s|",p.dateHeure);
-        fprintf(ptr, "%s|",p.nb_soins);
+        fprintf(ptr, "%d|",p.dateHeure);
+        //fprintf(ptr, "%s|",p.nb_soins);
         // Inscire les soins subis 
-        for(i=0; i<p.nb_soins; i+=1){
-            fprintf(ptr, "%c-",p.soin[i]); 
+        
+        for(i=0; i<7; i+=1){
+            fprintf(ptr, "%d-",p.soin[i]); 
         }
         fprintf(ptr, "%d|\n",p.nbNuit);
 
@@ -221,7 +223,7 @@ patient modifier_info_patient(){
 
 
 
-
+/*
 patient calculerDevis(){
     patient p ; 
     int i;
@@ -261,7 +263,7 @@ patient calculerDevis(){
 
     return p ;  
 
-
+*/
 
 
 
