@@ -25,7 +25,6 @@ struct patient{
     int nbNuit;
     int prix ; 
 
-    // Ajouter le soin : accouchement, ORL....
 };
 void EnregistrerInfosPatient(){
     char continuer='n';
@@ -87,26 +86,26 @@ void EnregistrerInfosPatient(){
         /*
         for(i=0; i<p.nb_soins; i+=1){
             printf("Saisir les soins : Accouchement, Bilan de sante, Opération du canal carpien, ORL, Echographie, Coloscopie, IRM");
-            scanf(" %[^\n]",soin_alternatif);
-            if (soin_alternatif == "Accouchement"){
+            scanf(" %100[^\n]",soin_alternatif);
+            if (strcmp(soin_alternatif, "Accouchement" ) == 0) {
                 p.soin[i] = 'a';
             }
-            if (soin_alternatif == "Bilan de sante"){
+            else if (strcmp(soin_alternatif, "Bilan de sante" ) == 0){
                 p.soin[i] = 'b';
             }
-            if (soin_alternatif == "Opération du canal carpien"){
+            else if (strcmp(soin_alternatif, "Opération du canal carpien" ) == 0){
                 p.soin[i] = 'z';
             }
-            if (soin_alternatif == "ORL"){
+            else if (strcmp(soin_alternatif, "ORL" ) == 0){
                 p.soin[i] = 'o';
             }
-            if (soin_alternatif == "Echographie"){
+            else if (strcmp(soin_alternatif, "Echographie" ) == 0){
                 p.soin[i] = 'e';
             }
-            if (soin_alternatif == "Coloscopie"){
+            else if (strcmp(soin_alternatif, "Coloscopie" ) == 0){
                 p.soin[i] = 'c';
             }
-            if (soin_alternatif == "IRM"){
+            else if (strcmp(soin_alternatif, "IRM" ) == 0){
                 p.soin[i] = 'i';
             }
         }
@@ -139,7 +138,7 @@ void EnregistrerInfosPatient(){
         for(i=0; i<7; i+=1){
             fprintf(ptr, "%d-",p.soin[i]); 
         }
-        fprintf(ptr, "%d|\n",p.nbNuit);
+        fprintf(ptr, "|%d|\n",p.nbNuit);
 
         //on réenregistre qqn ?
         printf("quitter(o), continuer(n): ");scanf(" %c",&continuer);
@@ -175,38 +174,53 @@ void afficherPatient(patient p){
             scanf(" %d",&p.nbNuit);
 }
 patient RechercherFichierPatient(){
-    int manip ; 
-    printf("Vous souhaitez modifier(1) ou rechercher(2) un fichier patient ? ");
-    scanf("%d", &manip); 
+    int compteur_nom = 0; 
+    int compteur_matricule = 0 ; 
+    char nom_recherche[20] ;  
     int n;
     int compteur = 0 ; 
+    int matricule ; 
     FILE *ptr;
     patient p;
-    ptr = fopen("patients_C.bin", "r+b");
-    if (manip == 2){
-        
-    }
+    ptr = fopen("patients_C.txt", "r");
     printf("Numéro de dossier (1) ou nom complet (2) :");
     scanf(" %d", &n);
     if (n==1){
         printf("Numéro de dossier : ");
-        scanf(" %[^\n]", &n);
+        scanf(" %[^\n]", &matricule);
         while (!feof(ptr)){
             fread (&p ,sizeof (patient) ,1 , ptr);
-            if (p.matricule==n){//complete lena
+            
+            if (p.matricule==n){
+                compteur_matricule +=1 ; 
                 printf("Le dossier du patient a ete trouvé"); 
                 return p;
                 break;   
-            }
-                 
+            }      
         }
     }
+    
     else{
-        
+        printf("Nom de famille du patient : "); 
+        scanf("%s", &nom_recherche); 
+
+        while (!feof(ptr)){
+            fread (&p ,sizeof (patient) ,1 , ptr);
+            if (strcmp(nom_recherche, p.nom) == 0){
+                compteur_nom+=1 ; 
+                printf("Le dossier du patient a ete trouve");
+                return p; 
+                break ; 
+            }   
+        }
     }
+    if (compteur_matricule == 0 && compteur_nom == 0){
+        printf("Le dossier n'a pas été trouvé"); 
+    }
+    
 }
 
-patient modifier_info_patient(){
+patient modifierFichier(){
     FILE *ptr ; 
     ptr = fopen("patients_python.txt", "r");
     int matricule ; 
@@ -214,7 +228,11 @@ patient modifier_info_patient(){
 
     printf("Saisir le donnée  modifier ");
     p = RechercherFichierPatient();
-    
+
+    printf("Saisir la donnée a modifier : Service (S), Nom (N), Prenom (P), Matricule (M), Age(A), Adresse (Ad), Sexe (S), Maladie (Ma), Numero de chambre (nbC), le prix paye (prix), le nombre de nuits passees (nbN), le nombre de soins et les soins(soins), le medecin (med), les coordonnees du medecin(medC), la date et l'heure (d)");
+    //scanf("%s", &val_modif); 
+
+
 
 }
 
@@ -223,7 +241,12 @@ patient modifier_info_patient(){
 
 
 
+
+
+
+
 /*
+
 patient calculerDevis(){
     patient p ; 
     int i;
@@ -269,7 +292,7 @@ patient calculerDevis(){
 
 
 
-}
+
 
 
 
@@ -298,10 +321,11 @@ while (selec!=7){
         }
         else if (selec==2)
             RechercherFichierPatient();
+
         // ....
         else if (selec==7){
             break;
-        } 
-    }
+}
+}
 }
 }
